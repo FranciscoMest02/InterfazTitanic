@@ -12,7 +12,6 @@ function UserView(props) {
         Embarked: "S",
         Title: "Officer",
     });
-    const [response, setResponse] = useState("")
     const [responseMessage, setResponseMessage] = useState("");
 
 
@@ -37,28 +36,28 @@ function UserView(props) {
         
         console.log(processedData)
     
-        // try {
-        //     const response = await fetch('http://127.0.0.1:5000/new/register', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(processedData)
-        //     });
+        try {
+            const response = await fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(processedData)
+            });
     
-        //     const result = await response.json();
-        //     console.log(result);
+            const result = await response.json();
+            console.log(result.prediction);
 
-        //     if (response.ok) { // This checks if the response status code is in the range 200-299
-        //         setResponseMessage("Data uploaded correctly");
-        //     } else {
-        //         setResponseMessage("Error saving data");
-        //     }
+            if (response.ok) { // This checks if the response status code is in the range 200-299
+                setResponseMessage(result.prediction);
+            } else {
+                setResponseMessage(result.prediction);
+            }
 
 
-        // } catch (error) {
-        //     console.error("Error submitting the form:", error);
-        // }
+        } catch (error) {
+            console.error("Error submitting the form:", error);
+        }
     }
     
 
@@ -71,7 +70,7 @@ function UserView(props) {
             <form onSubmit={handleSubmit}>
                 <label>
                     Passenger Class:
-                    <select name="Pclass" value={formData.Pclass} onChange={handleInputChange}>
+                    <select name="Pclass" value={formData.Pclass} onChange={handleInputChange} required>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -79,30 +78,30 @@ function UserView(props) {
                 </label>
                 <label>
                     Sex:
-                    <select name="Sex" defaultValue="Male" value={formData.Sex} onChange={handleInputChange}>
+                    <select name="Sex" defaultValue="Male" value={formData.Sex} onChange={handleInputChange} required>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                     </select>
                 </label>
                 <label>
                     Age:
-                    <input type="number" name="Age" value={formData.Age} onChange={handleInputChange} step="0.1" />
+                    <input type="number" name="Age" value={formData.Age} onChange={handleInputChange} step="0.1" required/>
                 </label>
                 <label>
                     Siblings/Spouses:
-                    <input type="number" name="SibSp" value={formData.SibSp} onChange={handleInputChange} />
+                    <input type="number" name="SibSp" value={formData.SibSp} onChange={handleInputChange} required/>
                 </label>
                 <label>
                     Parents/Children:
-                    <input type="number" name="Parch" value={formData.Parch} onChange={handleInputChange} />
+                    <input type="number" name="Parch" value={formData.Parch} onChange={handleInputChange} required/>
                 </label>
                 <label>
                     Fare:
-                    <input type="number" name="Fare" value={formData.Fare} onChange={handleInputChange} step="0.01" />
+                    <input type="number" name="Fare" value={formData.Fare} onChange={handleInputChange} step="0.01" required/>
                 </label>
                 <label>
                     Embarked:
-                    <select name="Embarked" value={formData.Embarked} onChange={handleInputChange}>
+                    <select name="Embarked" value={formData.Embarked} onChange={handleInputChange} required>
                         <option value="S">S</option>
                         <option value="C">C</option>
                         <option value="Q">Q</option>
@@ -110,7 +109,7 @@ function UserView(props) {
                 </label>
                 <label>
                     Title:
-                    <select name="Title" value={formData.Title} onChange={handleInputChange}>
+                    <select name="Title" value={formData.Title} onChange={handleInputChange} required>
                         <option value="Officer">Officer</option>
                         <option value="Royal">Royal</option>
                         <option value="Mrs">Mrs</option>
@@ -120,13 +119,6 @@ function UserView(props) {
                     </select>
                 </label>
                 <button type="submit">Submit</button>
-                {/* API response */}
-                <label className="response">
-                    ¿Survived?
-                    <input name="Survived" value={response}>
-                       
-                    </input>
-                </label>
             </form>
 
             <p id="styleMessage">{responseMessage}</p>
